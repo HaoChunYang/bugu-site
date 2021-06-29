@@ -1,0 +1,89 @@
+<template>
+  <div class="login-box">
+    <div class="center-box">
+      <div class="center-box-title">
+        登录
+      </div>
+      <el-form
+        :model="loginForm"
+        class="login-input"
+      >
+        <el-form-item>
+          <el-input
+            v-model="loginForm.userName"
+            placeholder="用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="loginForm.userPassword"
+            placeholder="密码"
+            type="password"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button
+        @click="userLogin"
+        type="primary"
+      >Login</el-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import { reactive, toRefs, onMounted } from 'vue'
+import { login } from '@/api/account'
+export default {
+  name: 'Login',
+  setup () {
+    const state = reactive({
+      loginForm: {
+        userName: '',
+        userPassword: ''
+      },
+      userName: '',
+      userPassword: ''
+    })
+
+    onMounted(() => {
+      console.log('on')
+    })
+
+    function userLogin () {
+      console.log('user will login', state.loginForm)
+      login(state.loginForm)
+    }
+
+    const userRegister = () => {
+      console.log('user register')
+    }
+
+    return {
+      ...toRefs(state),
+      userLogin,
+      userRegister
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.login-box {
+  text-align: center;
+}
+.center-box {
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #999999;
+  margin: 0 auto;
+  transform: translateY(50%);
+  .center-box-title {
+    line-height: 50px;
+    border-bottom: 1px solid #999999;
+  }
+  .login-input {
+    margin: 20px 20px;
+  }
+}
+</style>
