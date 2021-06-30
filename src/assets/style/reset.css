@@ -133,9 +133,9 @@ a {
   -webkit-backface-visibility: hidden;
 }
 
-li {
+/* li {
   list-style: none;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 5px;

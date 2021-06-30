@@ -16,12 +16,7 @@ import {
   ElInput
 } from 'element-plus'
 
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-
 const app = createApp(App)
-
-app.use(mavonEditor)
 
 app.component(ElButton.name, ElButton)
 app.use(ElCol)
