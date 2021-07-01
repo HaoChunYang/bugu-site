@@ -31,10 +31,31 @@ export default {
 <style lang="scss" scoped>
 .el-header {
   padding: 0;
+  // position: relative;
+  // height: 60px;
+  // width: 100%;
 }
 
 .el-aside {
   background-color: rgb(223, 250, 216);
   width: 100px !important;
+  // // display: block;
+  // position: absolute;
+  // left: 0;
+  // top: 60px;
+  // bottom: 0;
+  height: calc(100vh - 60px);
+}
+
+.el-main {
+  // position: absolute;
+  // left: 200px;
+  // right: 0;
+  // top: 60px;
+  // bottom: 0;
+  // overflow-y: scroll;
+  // 下面是第二种方式
+  // padding: 0 !important;
+  height: calc(100vh - 60px); // 只用设置主体 main 高度
 }
 </style>

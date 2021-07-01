@@ -13,8 +13,9 @@ export function post (url) {
 }
 
 export function get (url) {
-  return function (params) {
-    return axios.get(url, params).then(res => {
+  return function (params = {}) {
+    params.timestamp = new Date()
+    return axios.get(url, { params }).then(res => {
       return res.data
     }).catch(e => { })
   }

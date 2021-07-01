@@ -7,7 +7,13 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Layout,
+    redirect: '/index',
     children: [
+      {
+        path: '/index',
+        name: 'Index',
+        component: () => import('@/views/home/Home')
+      },
       {
         path: '/about',
         name: 'About',
@@ -32,6 +38,11 @@ const routes = [
         path: 'new',
         name: 'ArticleNew',
         component: () => import('@/views/article/ArticleEdit')
+      },
+      {
+        path: 'detail',
+        name: 'ArticleDetail',
+        component: () => import('@/views/article/ArticleDetail')
       }
     ]
   }
