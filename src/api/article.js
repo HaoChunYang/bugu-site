@@ -1,3 +1,4 @@
-import { post } from '@/utils/request'
+import { post, get } from '@/utils/request'
 
-export const puslish = post('/article/publish')
+export const publish = post('/article/publish')
+export const queryList = get('/article/list')

@@ -7,6 +7,44 @@
           v-model="articleForm.title"
         ></el-input>
       </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="标签">
+            <el-select
+              v-model="articleForm.tags"
+              clearable
+              multiple
+              filterable
+              allow-create
+              default-first-option
+              placeholder="请选择文章标签"
+            >
+              <el-option
+                v-for="item in tags"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="分类">
+            <el-select
+              v-model="articleForm.category"
+              clearable
+              placeholder="请选择分类"
+            >
+              <el-option
+                v-for="item in categories"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item>
         <el-input
           placeholder="使用 markdown 语法进行编辑……"
@@ -19,11 +57,12 @@
 
     <div class="bottom-button">
       <el-button
-        @click="publish"
+        @click="toPublish"
         type="primary"
       >发布</el-button>
       <el-button @click="toHtml">预览</el-button>
-      <el-button>取消</el-button>
+      <el-button @click="cancel">取消</el-button>
+      <el-button @click="test">test</el-button>
     </div>
     <div
       v-html="contentToHtml"
@@ -36,18 +75,59 @@
 import { reactive, toRefs } from 'vue'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
+import { publish, queryList } from '@/api/article'
+
 export default {
   name: 'ArticleEdit',
   setup () {
     const state = reactive({
       articleForm: {
         title: '',
-        content: ''
+        content: '',
+        tags: [],
+        category: []
       },
-      contentToHtml: '<h1>hello</h1>'
+      contentToHtml: '',
+      categories: [{
+        value: '1',
+        label: '面试'
+      }, {
+        value: '2',
+        label: 'Html'
+      }, {
+        value: '3',
+        label: 'css'
+      }, {
+        value: '4',
+        label: 'javascript'
+      }, {
+        value: '5',
+        label: 'Node.js'
+      }],
+      tags: [
+        {
+          label: 'HTML',
+          value: 'HTML'
+        },
+        {
+          label: 'CSS',
+          value: 'css'
+        },
+        {
+          label: 'JavaScript',
+          value: 'javascript'
+        }
+      ]
     })
 
-    function publish () { }
+    function toPublish () {
+      toHtml()
+      state.articleForm.contentToHtml = state.contentToHtml
+      state.articleForm.author = 'bogu'
+      publish(state.articleForm).then(res => {
+        console.log(res)
+      })
+    }
 
     const toHtml = () => {
       // const md = require('markdown-it')()
@@ -73,10 +153,22 @@ export default {
       state.contentToHtml = result
     }
 
+    const cancel = () => {
+      console.log('cancel')
+      console.log(typeof publish)
+      publish()
+    }
+
+    const test = () => {
+      queryList()
+    }
+
     return {
       ...toRefs(state),
-      publish,
-      toHtml
+      toPublish,
+      toHtml,
+      cancel,
+      test
     }
   }
 }
@@ -91,61 +183,64 @@ export default {
   width: 80%;
   height: 580px;
 }
-pre.hljs {
-  padding: 12px 2px 12px 40px !important;
-  border-radius: 5px !important;
-  position: relative;
-  font-size: 14px !important;
-  line-height: 22px !important;
-  overflow: hidden !important;
-  code {
-    display: block !important;
-    margin: 0 10px !important;
-    overflow-x: auto !important;
-  }
-  .line-numbers-rows {
-    position: absolute;
-    pointer-events: none;
-    top: 12px;
-    bottom: 12px;
-    left: 0;
-    font-size: 100%;
-    width: 40px;
-    text-align: center;
-    letter-spacing: -1px;
-    border-right: 1px solid rgba(0, 0, 0, 0.66);
-    user-select: none;
-    counter-reset: linenumber;
-    span {
-      pointer-events: none;
-      display: block;
-      counter-increment: linenumber;
-      &:before {
-        content: counter(linenumber);
-        color: #999;
-        display: block;
-        text-align: center;
-      }
-    }
-  }
-  b.name {
-    position: absolute;
-    top: 2px;
-    right: 50px;
-    z-index: 10;
-    color: #999;
-    pointer-events: none;
-  }
-  .copy-btn {
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    z-index: 10;
-    color: #333;
-    cursor: pointer;
-    background-color: #fff;
-    border: 0;
-    border-radius: 2px;
-  }
+.el-select {
+  width: 100%;
 }
+// pre.hljs {
+//   padding: 12px 2px 12px 40px !important;
+//   border-radius: 5px !important;
+//   position: relative;
+//   font-size: 14px !important;
+//   line-height: 22px !important;
+//   overflow: hidden !important;
+//   code {
+//     display: block !important;
+//     margin: 0 10px !important;
+//     overflow-x: auto !important;
+//   }
+//   .line-numbers-rows {
+//     position: absolute;
+//     pointer-events: none;
+//     top: 12px;
+//     bottom: 12px;
+//     left: 0;
+//     font-size: 100%;
+//     width: 40px;
+//     text-align: center;
+//     letter-spacing: -1px;
+//     border-right: 1px solid rgba(0, 0, 0, 0.66);
+//     user-select: none;
+//     counter-reset: linenumber;
+//     span {
+//       pointer-events: none;
+//       display: block;
+//       counter-increment: linenumber;
+//       &:before {
+//         content: counter(linenumber);
+//         color: #999;
+//         display: block;
+//         text-align: center;
+//       }
+//     }
+//   }
+//   b.name {
+//     position: absolute;
+//     top: 2px;
+//     right: 50px;
+//     z-index: 10;
+//     color: #999;
+//     pointer-events: none;
+//   }
+//   .copy-btn {
+//     position: absolute;
+//     top: 2px;
+//     right: 4px;
+//     z-index: 10;
+//     color: #333;
+//     cursor: pointer;
+//     background-color: #fff;
+//     border: 0;
+//     border-radius: 2px;
+//   }
+// }
 </style>

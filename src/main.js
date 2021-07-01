@@ -6,6 +6,7 @@ import store from './store'
 import '@/assets/style/reset.css'
 import {
   ElButton,
+  ElRow,
   ElCol,
   ElContainer,
   ElMain,
@@ -13,14 +14,18 @@ import {
   ElHeader,
   ElForm,
   ElFormItem,
-  ElInput
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElIcon
 } from 'element-plus'
 
 const app = createApp(App)
 
 app.component(ElButton.name, ElButton)
-app.use(ElCol)
+app.use(ElRow).use(ElCol)
 app.use(ElContainer).use(ElHeader).use(ElAside).use(ElMain)
 app.use(ElForm).use(ElFormItem).use(ElInput)
+app.use(ElSelect).use(ElOption).use(ElIcon)
 
 app.use(store).use(router).mount('#app')
