@@ -17,7 +17,9 @@ import {
   ElInput,
   ElSelect,
   ElOption,
-  ElIcon
+  ElIcon,
+  ElTabPane,
+  ElTabs
 } from 'element-plus'
 
 const app = createApp(App)
@@ -27,5 +29,6 @@ app.use(ElRow).use(ElCol)
 app.use(ElContainer).use(ElHeader).use(ElAside).use(ElMain)
 app.use(ElForm).use(ElFormItem).use(ElInput)
 app.use(ElSelect).use(ElOption).use(ElIcon)
+app.use(ElTabs).use(ElTabPane)
 
 app.use(store).use(router).mount('#app')

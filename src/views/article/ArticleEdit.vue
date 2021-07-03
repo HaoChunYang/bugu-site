@@ -46,12 +46,32 @@
         </el-col>
       </el-row>
       <el-form-item>
-        <el-input
-          placeholder="使用 markdown 语法进行编辑……"
-          v-model="articleForm.content"
-          type="textarea"
-          :rows="15"
-        ></el-input>
+        <el-tabs
+          v-model="activeName"
+          type="card"
+          @tab-click="handleClick"
+        >
+          <el-tab-pane
+            label="编辑"
+            name="first"
+          >
+            <el-input
+              placeholder="使用 markdown 语法进行编辑……"
+              v-model="articleForm.content"
+              type="textarea"
+              :rows="20"
+            ></el-input>
+          </el-tab-pane>
+          <el-tab-pane
+            label="预览"
+            name="second"
+          >
+            <div
+              v-html="contentToHtml"
+              class="markdown-body"
+            ></div>
+          </el-tab-pane>
+        </el-tabs>
       </el-form-item>
     </el-form>
 
@@ -60,14 +80,8 @@
         @click="toPublish"
         type="primary"
       >发布</el-button>
-      <el-button @click="toHtml">预览</el-button>
       <el-button @click="cancel">取消</el-button>
-      <el-button @click="test">test</el-button>
     </div>
-    <div
-      v-html="contentToHtml"
-      class="markdown-body"
-    ></div>
   </div>
 </template>
 
@@ -75,7 +89,7 @@
 import { onMounted, reactive, toRefs } from 'vue'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
-import { publish, queryList, update } from '@/api/article'
+import { publish, update } from '@/api/article'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -90,6 +104,7 @@ export default {
         categoryId: []
       },
       contentToHtml: '',
+      activeName: 'first',
       categories: [{
         value: '1',
         label: '面试'
@@ -135,12 +150,21 @@ export default {
       toHtml()
       state.articleForm.contentToHtml = state.contentToHtml
       state.articleForm.author = 'bogu'
-      // publish(state.articleForm).then(res => {
-      //   console.log(res)
-      // })
-      update(state.articleForm).then(res => {
-        console.log(res)
-      })
+      if (route.name === 'ArticleEdit') {
+        update(state.articleForm).then(res => {
+          console.log(res)
+        })
+      } else {
+        publish(state.articleForm).then(res => {
+          console.log(res)
+        })
+      }
+    }
+
+    const handleClick = () => {
+      if (state.activeName === 'second') {
+        toHtml()
+      }
     }
 
     const toHtml = () => {
@@ -173,16 +197,12 @@ export default {
       publish()
     }
 
-    const test = () => {
-      queryList()
-    }
-
     return {
       ...toRefs(state),
       toPublish,
       toHtml,
       cancel,
-      test
+      handleClick
     }
   }
 }

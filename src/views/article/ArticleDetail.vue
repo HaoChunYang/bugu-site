@@ -49,7 +49,7 @@ export default {
     const toEdit = () => {
       // console.log('article : ', state.article)
       router.push({
-        name: 'ArticleNew',
+        name: 'ArticleEdit',
         params: {
           ...state.article
         }
