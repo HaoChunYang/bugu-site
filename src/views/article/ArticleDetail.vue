@@ -1,12 +1,20 @@
 <template>
   <div>
-    <h1>{{ article.title }}</h1>
-    <span>{{ article.author }}</span>
-    <span>{{ article.createTime }}</span>
+    <h1 class="title">{{ article.title }}</h1>
+    <div class="article-info-box">
+      <span>{{ article.author }}</span>
+      <span>{{ article.createTime }}</span>
+    </div>
     <div
       v-html="article.contentHtml"
-      class="markdown-body"
+      class="markdown-body article-content-box"
     ></div>
+    <div class="tools-box">
+      <el-button
+        type="primary"
+        @click="toEdit"
+      >编辑</el-button>
+    </div>
   </div>
 </template>
 
@@ -15,12 +23,13 @@ import { queryDetail } from '@/api/article'
 import { onMounted, reactive, toRefs } from '@vue/runtime-core'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   name: 'ArticleDetail',
   setup () {
     const route = useRoute()
+    const router = useRouter()
     const state = reactive({
       article: {}
     })
@@ -37,14 +46,40 @@ export default {
       })
     })
 
+    const toEdit = () => {
+      // console.log('article : ', state.article)
+      router.push({
+        name: 'ArticleNew',
+        params: {
+          ...state.article
+        }
+      })
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      toEdit
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 20px;
+}
+.article-info-box {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgb(150 150 150 / 30%);
+}
+.article-content-box {
+  padding: 20px;
+}
 // .markdown-body {
 //   // width: 100%;
 //   // height: 500px;

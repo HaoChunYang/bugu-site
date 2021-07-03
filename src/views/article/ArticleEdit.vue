@@ -31,7 +31,7 @@
         <el-col :span="12">
           <el-form-item label="分类">
             <el-select
-              v-model="articleForm.category"
+              v-model="articleForm.categoryId"
               clearable
               placeholder="请选择分类"
             >
@@ -72,20 +72,22 @@
 </template>
 
 <script>
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
-import { publish, queryList } from '@/api/article'
+import { publish, queryList, update } from '@/api/article'
+import { useRoute } from 'vue-router'
 
 export default {
   name: 'ArticleEdit',
   setup () {
+    const route = useRoute()
     const state = reactive({
       articleForm: {
         title: '',
         content: '',
         tags: [],
-        category: []
+        categoryId: []
       },
       contentToHtml: '',
       categories: [{
@@ -120,11 +122,23 @@ export default {
       ]
     })
 
+    onMounted(() => {
+      console.log(route.params)
+      if (Object.keys(route.params).length !== 0) {
+        state.articleForm = route.params
+        state.articleForm.tags = route.params.tags.split(',')
+        console.log(state.articleForm)
+      }
+    })
+
     function toPublish () {
       toHtml()
       state.articleForm.contentToHtml = state.contentToHtml
       state.articleForm.author = 'bogu'
-      publish(state.articleForm).then(res => {
+      // publish(state.articleForm).then(res => {
+      //   console.log(res)
+      // })
+      update(state.articleForm).then(res => {
         console.log(res)
       })
     }

@@ -1,15 +1,29 @@
 <template>
-  <div>
+  <div class="list-box">
     <div
-      class="container"
+      class="list-item"
       v-for="article in articles"
       :key="article.id"
-      @click="toDetial(article.id)"
     >
-      <h2>{{ article.title }}</h2>
-      <span>{{ article.author }}</span>
-      <p v-html="article.contentHtml"></p>
-      <span>{{ article.createTime }}</span>
+      <div class="content">
+        <div
+          class="link"
+          @click="toDetial(article.id)"
+        >
+          <h2>{{ article.title }}</h2>
+          <p
+            v-html="article.content"
+            class="desc"
+          ></p>
+        </div>
+        <div class="operation">
+          <a href="">
+            <span>{{ article.author }}</span>
+          </a>
+          <span>{{ article.createTime }}</span>
+          <span>99 浏览</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -55,4 +69,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list-box {
+  // margin: 24px;
+}
+.list-item {
+  padding: 24px;
+  // margin-bottom: 24px;
+  display: flex;
+  border-bottom: 1px solid #f0f0f2;
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .link {
+      cursor: pointer;
+      h2:hover {
+        text-decoration: underline;
+        color: #42b983;
+      }
+    }
+    .desc {
+      line-height: 1.5;
+      margin-top: 16px;
+      width: 100%;
+      font-size: 14px;
+      font-weight: 400;
+      min-height: 6px;
+      color: #555666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-all;
+      // overflow-wrap: break-word;
+      display: -moz-box;
+      -moz-line-clamp: 2;
+      -moz-box-orient: vertical;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+
+    .operation {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #999aaa;
+      span:nth-child(n + 2) {
+        margin-left: 20px;
+      }
+    }
+  }
+}
 </style>
