@@ -90,14 +90,17 @@ import { onMounted, reactive, toRefs } from 'vue'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
 import { publish, update } from '@/api/article'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'ArticleEdit',
   setup () {
     const route = useRoute()
+    const router = useRouter()
     const state = reactive({
       articleForm: {
+        id: '',
         title: '',
         content: '',
         tags: [],
@@ -152,11 +155,32 @@ export default {
       state.articleForm.author = 'bogu'
       if (route.name === 'ArticleEdit') {
         update(state.articleForm).then(res => {
-          console.log(res)
+          if (res.retCode === 200) {
+            ElMessage.success('文章更新成功')
+            router.push({
+              path: '/article/detail',
+              query: {
+                id: state.articleForm.id
+              }
+            })
+          } else {
+            ElMessage.warning(res.retMsg)
+          }
+        }).catch(e => {
+          ElMessage.error('文章更新失败')
         })
       } else {
         publish(state.articleForm).then(res => {
-          console.log(res)
+          if (res.retCode === 200) {
+            ElMessage.success('文章发布成功')
+            router.push({
+              path: '/'
+            })
+          } else {
+            ElMessage.error(res.retMsg)
+          }
+        }).catch(e => {
+          ElMessage.error('文章发布失败')
         })
       }
     }
@@ -194,7 +218,7 @@ export default {
     const cancel = () => {
       console.log('cancel')
       console.log(typeof publish)
-      publish()
+      router.go(-1)
     }
 
     return {

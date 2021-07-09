@@ -1,3 +1,3 @@
 import { post } from '@/utils/request'
 
-export const login = post('/account/login')
+export const login = post('/user/login')

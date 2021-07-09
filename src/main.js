@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 
 import '@/assets/style/reset.css'
+
 import {
   ElButton,
   ElRow,
@@ -19,8 +20,14 @@ import {
   ElOption,
   ElIcon,
   ElTabPane,
-  ElTabs
+  ElTabs,
+  ElMessage,
+  ElDropdown,
+  ElDropdownItem,
+  ElDropdownMenu
 } from 'element-plus'
+
+import './permission'
 
 const app = createApp(App)
 
@@ -30,5 +37,8 @@ app.use(ElContainer).use(ElHeader).use(ElAside).use(ElMain)
 app.use(ElForm).use(ElFormItem).use(ElInput)
 app.use(ElSelect).use(ElOption).use(ElIcon)
 app.use(ElTabs).use(ElTabPane)
+app.use(ElDropdown).use(ElDropdownMenu).use(ElDropdownItem)
+
+app.use(ElMessage)
 
 app.use(store).use(router).mount('#app')

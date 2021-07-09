@@ -19,11 +19,12 @@
 </template>
 
 <script>
-import { queryDetail } from '@/api/article'
+import { queryDetail, wantNewOneArticle } from '@/api/article'
 import { onMounted, reactive, toRefs } from '@vue/runtime-core'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'ArticleDetail',
@@ -47,12 +48,19 @@ export default {
     })
 
     const toEdit = () => {
-      // console.log('article : ', state.article)
-      router.push({
-        name: 'ArticleEdit',
-        params: {
-          ...state.article
+      wantNewOneArticle().then(res => {
+        if (res.retCode === 200) {
+          router.push({
+            name: 'ArticleEdit',
+            params: {
+              ...state.article
+            }
+          })
+        } else {
+          ElMessage.warning(res.retMsg)
         }
+      }).catch(e => {
+        ElMessage.warning('请先登录')
       })
     }
 

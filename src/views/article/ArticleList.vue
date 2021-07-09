@@ -45,8 +45,11 @@ export default {
     onMounted(() => {
       console.log('Component is mounted!')
       queryList().then(res => {
-        console.log('query list:', res)
-        state.articles = res.result
+        if (res.retCode === 200) {
+          state.articles = res.result
+        }
+      }).catch(e => {
+        console.log(e)
       })
     })
 

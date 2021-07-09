@@ -33,9 +33,13 @@
 <script>
 import { reactive, toRefs, onMounted } from 'vue'
 import { login } from '@/api/account'
+import { useRouter } from 'vue-router'
+import crypto from 'crypto'
+import { ElMessage } from 'element-plus'
 export default {
   name: 'Login',
   setup () {
+    const router = useRouter()
     const state = reactive({
       loginForm: {
         userName: '',
@@ -50,8 +54,24 @@ export default {
     })
 
     function userLogin () {
-      console.log('user will login', state.loginForm)
-      login(state.loginForm)
+      const md5 = crypto.createHash('md5')
+      md5.update(state.loginForm.userPassword)
+      md5.update(state.loginForm.userPassword).toString()
+      const pwd = md5.update(md5.update(state.loginForm.userPassword).toString())
+      const params = Object.create(state.loginForm)
+      params.userPassword = pwd.digest('hex')
+      params.userName = state.loginForm.userName
+      login(params).then(res => {
+        if (res.retCode === 200) {
+          localStorage.setItem('token', res.token)
+          localStorage.setItem('userInfo', JSON.stringify({ userName: state.loginForm.userName, isLogin: true }))
+          router.push({
+            path: '/'
+          })
+        } else {
+          ElMessage.error(res.retMsg)
+        }
+      })
     }
 
     const userRegister = () => {
