@@ -5,15 +5,6 @@ import asyncRoutes from '@/router/asyncRoutes'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-// 解决路由跳转原路由或者刷新出错
-const originalReplace = router.prototype.replace
-router.prototype.replace = function replace (location) {
-  return originalReplace.call(this, location).catch(err => err)
-}
-const originalPush = router.prototype.push
-router.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
 /**
  * roles: visitor 游客 outer 退出登录用户 user 普通用户（登录） admin 管理员
  */
