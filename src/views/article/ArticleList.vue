@@ -21,9 +21,16 @@
             <span>{{ article.author }}</span>
           </a>
           <span>{{ article.createTime }}</span>
-          <span>99 浏览</span>
+          <span>浏览({{ article.count }})</span>
         </div>
       </div>
+    </div>
+    <div class="tool-box">
+      <el-button
+        v-if="pageSet.start !== 1"
+        @click="prePage"
+      >上一页</el-button>
+      <el-button @click="nextPage">下一页</el-button>
     </div>
   </div>
 </template>
@@ -33,39 +40,62 @@ import { reactive, toRefs } from '@vue/reactivity'
 import { queryList } from '@/api/article'
 import { onMounted } from '@vue/runtime-core'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'ArticleList',
   setup () {
     const state = reactive({
-      articles: []
+      articles: [],
+      pageSet: {
+        start: 1,
+        limit: 10
+      }
     })
 
     const router = useRouter()
     onMounted(() => {
       console.log('Component is mounted!')
-      queryList().then(res => {
+      query()
+    })
+
+    const query = () => {
+      queryList(state.pageSet).then(res => {
         if (res.retCode === 200) {
-          state.articles = res.result
+          if (res && res.result && res.result.length > 0) {
+            state.articles = res.result
+          } else {
+            state.pageSet.start--
+            ElMessage.warning('无更多文章~')
+          }
         }
       }).catch(e => {
         console.log(e)
       })
-    })
+    }
 
     const toDetial = (id) => {
       console.log('to detail')
       router.push({
-        path: '/article/detail',
-        query: {
-          id
-        }
+        path: '/article/detail/' + id
       })
+    }
+
+    function prePage () {
+      state.pageSet.start--
+      query()
+    }
+
+    function nextPage () {
+      state.pageSet.start++
+      query()
     }
 
     return {
       ...toRefs(state),
-      toDetial
+      toDetial,
+      prePage,
+      nextPage
     }
   }
 }
@@ -74,6 +104,11 @@ export default {
 <style lang="scss" scoped>
 .list-box {
   // margin: 24px;
+  .tool-box {
+    margin: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .list-item {
   padding: 24px;

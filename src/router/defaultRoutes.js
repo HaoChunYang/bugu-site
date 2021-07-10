@@ -39,7 +39,7 @@ const defaultRoutes = [
     component: Layout,
     children: [
       {
-        path: 'detail',
+        path: 'detail/:id',
         name: 'ArticleDetail',
         component: () => import('@/views/article/ArticleDetail')
       }

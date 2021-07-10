@@ -2,18 +2,14 @@
   <div class="about">
     <h1>This is an about page</h1>
 
-    <el-select
-      v-model="value"
-      placeholder="请选择"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
+    <el-carousel height="40px">
+      <el-carousel-item
+        v-for="item in 3"
+        :key="item"
       >
-      </el-option>
-    </el-select>
+        <h3>{{ item }}</h3>
+      </el-carousel-item>
+    </el-carousel>
   </div>
 </template>
 

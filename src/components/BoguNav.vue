@@ -10,6 +10,21 @@
       >
       <span>Bogu Site</span>
     </div>
+    <div class="nav_mottes">
+      <el-carousel
+        height="40px"
+        indicator-position="none"
+        arrow="never"
+        direction="vertical"
+      >
+        <el-carousel-item
+          v-for="item in mottos"
+          :key="item"
+        >
+          <h3>{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
     <div class="nav__right">
       <div id="nav">
         <router-link to="/">Home</router-link>
@@ -51,7 +66,8 @@ export default {
   setup () {
     const state = reactive({
       isLogin: false,
-      userName: ''
+      userName: '',
+      mottos: ['一笔一画写代码，一笔一画做记录', '种树的最好时间是十年前，其次是现在', '为你写诗，为你敲代码']
     })
     onMounted(() => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -143,6 +159,12 @@ export default {
     font-size: 20px;
     color: 2c3e50;
     text-decoration: underline;
+  }
+  .nav_mottes {
+    width: 400px;
+    h3 {
+      line-height: 35px;
+    }
   }
 }
 

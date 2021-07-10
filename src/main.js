@@ -24,7 +24,9 @@ import {
   ElMessage,
   ElDropdown,
   ElDropdownItem,
-  ElDropdownMenu
+  ElDropdownMenu,
+  ElCarousel,
+  ElCarouselItem
 } from 'element-plus'
 
 import './permission'
@@ -38,6 +40,7 @@ app.use(ElForm).use(ElFormItem).use(ElInput)
 app.use(ElSelect).use(ElOption).use(ElIcon)
 app.use(ElTabs).use(ElTabPane)
 app.use(ElDropdown).use(ElDropdownMenu).use(ElDropdownItem)
+app.use(ElCarousel).use(ElCarouselItem)
 
 app.use(ElMessage)
 

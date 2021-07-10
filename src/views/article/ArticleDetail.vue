@@ -3,7 +3,9 @@
     <h1 class="title">{{ article.title }}</h1>
     <div class="article-info-box">
       <span>{{ article.author }}</span>
-      <span>{{ article.createTime }}</span>
+      <span>阅读({{ article.count }})</span>
+      <span>发布于:{{ article.createTime }}</span>
+      <span v-if="article.createTime !== article.updateTime">最后更新:{{ article.updateTime }}</span>
     </div>
     <div
       v-html="article.contentHtml"
@@ -35,8 +37,7 @@ export default {
       article: {}
     })
     onMounted(() => {
-      console.log('detail on mounted', route.query)
-      const id = route.query.id
+      const id = route.params.id
       queryDetail({ id }).then(res => {
         console.log('detail: ', res)
         if (res.retCode === 200) {
@@ -79,11 +80,14 @@ export default {
   margin: 20px;
 }
 .article-info-box {
-  display: flex;
-  justify-content: space-between;
+  // display: flex;
+  // justify-content: space-between;
   margin: 20px;
   padding: 20px;
   box-shadow: 0 1px 2px rgb(150 150 150 / 30%);
+  span:nth-child(n + 2) {
+    margin-left: 20px;
+  }
 }
 .article-content-box {
   padding: 20px;
