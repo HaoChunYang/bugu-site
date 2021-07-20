@@ -2,6 +2,10 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+// import { useStore } from 'vuex'
+import store from '@/store'
+
+// const store = useStore()
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -25,7 +29,15 @@ axios.interceptors.response.use(
   },
   error => {
     ElMessage.error(`${error.response.status} ${error.response.statusText}`)
-    return Promise.reject(error)
+    console.log(typeof error.response.status)
+    if (error.response.status === 401) {
+      store.dispatch('user/updateLoginStatus', false)
+      console.log('re login')
+      // window.location.reload()
+      return false
+    } else {
+      return Promise.reject(error)
+    }
   }
 )
 

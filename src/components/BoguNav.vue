@@ -27,7 +27,7 @@
     </div>
     <div class="nav__right">
       <div id="nav">
-        <router-link to="/">Home</router-link>
+        <router-link to="/">首页</router-link>
         <!-- <router-link to="/about">About</router-link> |
         <router-link to="/login">Login</router-link> -->
       </div>
@@ -44,6 +44,7 @@
         <span class="user-nav-box">{{ userName }}</span>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item command="changePwd">修改密码</el-dropdown-item>
             <el-dropdown-item command="logout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -60,15 +61,29 @@
 import { useRouter } from 'vue-router'
 import { wantNewOneArticle } from '@/api/article'
 import { ElMessage } from 'element-plus'
-import { onMounted, reactive, toRefs } from '@vue/runtime-core'
+import { computed, onMounted, reactive, toRefs } from '@vue/runtime-core'
+import { useStore } from 'vuex'
 export default {
   name: 'BoguNav',
   setup () {
+    const router = useRouter()
+    const store = useStore()
+
     const state = reactive({
-      isLogin: false,
+      isLogin: computed(() => {
+        if (localStorage.getItem('token')) {
+          store.dispatch('user/updateLoginStatus', true)
+        }
+        return store.getters.isLogin
+      }),
       userName: '',
       mottos: ['一笔一画写代码，一笔一画做记录', '种树的最好时间是十年前，其次是现在', '为你写诗，为你敲代码']
     })
+
+    // watch(() => store.getters.isLogin, (newVal) => {
+    //   console.log('the loginstatue:::', newVal)
+    //   state.isLogin = newVal
+    // })
     onMounted(() => {
       const userInfo = JSON.parse(localStorage.getItem('userInfo'))
       if (userInfo) {
@@ -76,7 +91,6 @@ export default {
         state.userName = userInfo.userName
       }
     })
-    const router = useRouter()
     function toLogin () {
       console.log('I will login')
       router.push({
@@ -101,11 +115,17 @@ export default {
     const userCommand = (command) => {
       console.log('----', command)
       if (command === 'logout') {
-        localStorage.removeItem('userInfo')
-        localStorage.removeItem('token')
-        localStorage.setItem('userRoles', JSON.stringify({ roles: 'visitor' }))
-        state.isLogin = false
+        // localStorage.removeItem('userInfo')
+        // localStorage.removeItem('token')
+        // localStorage.setItem('userRoles', JSON.stringify({ roles: 'visitor' }))
+        // store.dispatch('user/updateRoles', [])
+        store.dispatch('user/updateLoginStatus', false)
+        state.isLogin = store.getters.isLogin
         state.userName = ''
+      } else if (command === 'changePwd') {
+        router.push({
+          path: '/user/setting/pwd'
+        })
       }
     }
 

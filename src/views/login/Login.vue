@@ -36,9 +36,11 @@ import { login } from '@/api/account'
 import { useRouter } from 'vue-router'
 import crypto from 'crypto'
 import { ElMessage } from 'element-plus'
+import { useStore } from 'vuex'
 export default {
   name: 'Login',
   setup () {
+    const store = useStore()
     const router = useRouter()
     const state = reactive({
       loginForm: {
@@ -65,6 +67,8 @@ export default {
         if (res.retCode === 200) {
           localStorage.setItem('token', res.token)
           localStorage.setItem('userInfo', JSON.stringify({ userName: state.loginForm.userName, isLogin: true }))
+          store.dispatch('user/updateRoles', ['user'])
+          store.dispatch('user/updateLoginStatus', true)
           router.push({
             path: '/'
           })

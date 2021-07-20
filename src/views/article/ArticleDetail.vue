@@ -85,6 +85,8 @@ export default {
   margin: 20px;
   padding: 20px;
   box-shadow: 0 1px 2px rgb(150 150 150 / 30%);
+  font-size: 14px;
+  color: #999999;
   span:nth-child(n + 2) {
     margin-left: 20px;
   }

@@ -158,10 +158,7 @@ export default {
           if (res.retCode === 200) {
             ElMessage.success('文章更新成功')
             router.push({
-              path: '/article/detail',
-              query: {
-                id: state.articleForm.id
-              }
+              path: `/article/detail/${state.articleForm.id}`
             })
           } else {
             ElMessage.warning(res.retMsg)

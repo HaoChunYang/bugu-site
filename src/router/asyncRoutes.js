@@ -19,6 +19,18 @@ const asyncRoutes = [
         meta: { roles: ['user', 'admin'] }
       }
     ]
+  },
+  {
+    path: '/user',
+    name: 'AsyncUser',
+    component: Layout,
+    children: [
+      {
+        path: 'setting/pwd',
+        name: 'SettingPwd',
+        component: () => import('@/views/user/SettingPwd')
+      }
+    ]
   }
 ]
 
