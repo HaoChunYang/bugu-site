@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <bogu-nav></bogu-nav>
+        <bugu-nav></bugu-nav>
       </el-header>
       <el-container>
         <el-aside></el-aside>
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import BoguNav from '@/components/BoguNav'
+import BuguNav from '@/components/BuguNav'
 export default {
   name: 'Layout',
   components: {
-    BoguNav
+    BuguNav
   },
   setup () {
 

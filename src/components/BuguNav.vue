@@ -6,9 +6,9 @@
     >
       <img
         src="@/assets/logo.jpg"
-        alt="bogu logo"
+        alt="bugu logo"
       >
-      <span>Bogu Site</span>
+      <span>Bugu Site</span>
     </div>
     <div class="nav_mottes">
       <el-carousel
@@ -64,7 +64,7 @@ import { ElMessage } from 'element-plus'
 import { computed, onMounted, reactive, toRefs } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 export default {
-  name: 'BoguNav',
+  name: 'BuguNav',
   setup () {
     const router = useRouter()
     const store = useStore()
