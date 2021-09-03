@@ -27,9 +27,9 @@
     </div>
     <div class="nav__right">
       <div id="nav">
-        <router-link to="/">首页</router-link>
-        <!-- <router-link to="/about">About</router-link> |
-        <router-link to="/login">Login</router-link> -->
+        <router-link to="/">首页</router-link> |
+        <router-link to="/lottery">抽奖Demo</router-link>
+        <!-- <router-link to="/login">Login</router-link> -->
       </div>
       <el-button
         type="text"
@@ -77,7 +77,8 @@ export default {
         return store.getters.isLogin
       }),
       userName: '',
-      mottos: ['一笔一画写代码，一笔一画做记录', '种树的最好时间是十年前，其次是现在', '为你写诗，为你敲代码']
+      // mottos: ['一笔一画写代码，一笔一画做记录', '种树的最好时间是十年前，其次是现在', '为你写诗，为你敲代码']
+      mottos: []
     })
 
     // watch(() => store.getters.isLogin, (newVal) => {
@@ -115,10 +116,6 @@ export default {
     const userCommand = (command) => {
       console.log('----', command)
       if (command === 'logout') {
-        // localStorage.removeItem('userInfo')
-        // localStorage.removeItem('token')
-        // localStorage.setItem('userRoles', JSON.stringify({ roles: 'visitor' }))
-        // store.dispatch('user/updateRoles', [])
         store.dispatch('user/updateLoginStatus', false)
         state.isLogin = store.getters.isLogin
         state.userName = ''

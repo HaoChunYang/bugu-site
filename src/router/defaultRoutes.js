@@ -44,6 +44,16 @@ const defaultRoutes = [
         component: () => import('@/views/article/ArticleDetail')
       }
     ]
+  },
+  {
+    path: '/lottery',
+    name: 'LuckyDraw',
+    component: () => import('@/views/luckyDraw/LuckyDraw')
+  },
+  {
+    path: '/lottery-pro',
+    name: 'LuckyDrawPro',
+    component: () => import('@/views/luckyDraw/LuckyDrawPro')
   }
 ]
 export default defaultRoutes
