@@ -51,7 +51,8 @@ import LotterySetup from './LotterySetup.vue'
 import { reactive, toRefs } from '@vue/reactivity'
 import { computed, onMounted } from '@vue/runtime-core'
 import { useStore } from 'vuex'
-import { getTrophies } from '@/api/lottery'
+import { getTrophiesApi, lotteryPlayApi } from '@/api/lottery'
+import { ElMessageBox } from 'element-plus'
 export default {
   name: 'LuckyDrawPro',
   components: {
@@ -64,7 +65,7 @@ export default {
       count: 0,
       gridList: computed(() => {
         const gridList = JSON.parse(JSON.stringify(store.getters.trophies))
-        const drawObj = { id: 9999, name: '免费抽奖1次' }
+        const drawObj = state.count ? { id: 9999, name: '200矿石/次' } : { id: 9999, name: '免费抽奖1次' }
         gridList.splice(4, 0, drawObj)
         return gridList
       }),
@@ -82,15 +83,11 @@ export default {
     })
 
     onMounted(async () => {
-      const res = await getTrophies({ times: 1 })
+      const res = await getTrophiesApi({ times: 1 })
       if (res.retCode === 200) {
         store.dispatch('lottery/updateTrophies', res.result)
       }
     })
-
-    function randomTrophy () {
-      return Math.floor(Math.random() * state.trophyRange.length)
-    }
 
     function getScaleList (validTrophyList) {
       let totalWeight = 0
@@ -161,19 +158,17 @@ export default {
         trophyList[id - 1].style.background = '#ffffff'
         trophiesEle.push(trophyList[id - 1])
       }
-      const randomTrophyIndex = randomTrophy()
 
       // 随机中奖物品ID
-      let trophyId = state.trophyRange[randomTrophyIndex]
-      // 根据权重概率得到中奖物品ID
-      const random = Math.random()
+      let trophyId
+      const res = await lotteryPlayApi({ times: state.count + 1 })
+      if (res.retCode === 200) {
+        trophyId = res.result.lotteryId
+      }
 
-      console.log('scale list :', getScaleList(validTrophyList), validTrophyList)
-      trophyId = getTrophyResult(getScaleList(validTrophyList))(random)
-      // trophyId = 6
-      console.log(random, trophyId)
+      console.log(trophyId)
       const revolvingLength = 8 * state.trophyRange.length + state.trophyRange.indexOf(trophyId) + 1
-      // console.log('===', state.trophyRange, revolvingLength, state.trophyRange.indexOf(trophyId) + 1)
+      console.log('===', state.trophyRange, revolvingLength, state.trophyRange.indexOf(trophyId) + 1)
       let time = 450
       const singleRevolvLen = state.trophyRange.length
       for (let i = 0; i < revolvingLength; i++) {
@@ -195,8 +190,7 @@ export default {
         store.dispatch('lottery/minusOre', 200)
       }
       state.count++
-      state.gridList[4].name = '200矿石/次'
-      const res = await getTrophies({ times: state.count + 1 })
+      const res = await getTrophiesApi({ times: state.count + 1 })
       if (res.retCode === 200) {
         store.dispatch('lottery/updateTrophies', res.result)
       }
@@ -205,6 +199,11 @@ export default {
       const myTrophy = trophies.filter((item) => item.id === trophyId)[0]
       state.myTrophies.push(myTrophy)
       console.log('恭喜你中奖', myTrophy.name)
+      ElMessageBox.confirm(myTrophy.name, '恭喜您中奖', {
+        confirmButtonText: '再抽一次',
+        showCancelButton: false,
+        center: true
+      })
       if (trophyId === 1) {
         store.dispatch('lottery/addOre', 66)
       }

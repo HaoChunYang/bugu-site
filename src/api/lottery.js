@@ -1,4 +1,5 @@
-import { get } from '@/utils/request'
+import { get, post } from '@/utils/request'
 
-// export const publish = post('/article/publish')
-export const getTrophies = get('/lottery/trophies')
+export const getTrophiesApi = get('/lottery/trophies')
+export const lotteryPlayApi = post('/lottery/play')
+export const updateLotterySetupApi = post('/lottery/setup/update')

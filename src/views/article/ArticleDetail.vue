@@ -15,6 +15,7 @@
       <el-button
         type="primary"
         @click="toEdit"
+        v-if="isLogin && userInfo && userInfo.userName === article.author"
       >编辑</el-button>
     </div>
   </div>
@@ -22,19 +23,27 @@
 
 <script>
 import { queryDetail, wantNewOneArticle } from '@/api/article'
-import { onMounted, reactive, toRefs } from '@vue/runtime-core'
+import { computed, onMounted, reactive, toRefs } from '@vue/runtime-core'
 import 'github-markdown-css/github-markdown.css'
 import 'highlight.js/styles/atom-one-light.css'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { useStore } from 'vuex'
 
 export default {
   name: 'ArticleDetail',
   setup () {
     const route = useRoute()
     const router = useRouter()
+    const store = useStore()
     const state = reactive({
-      article: {}
+      article: {},
+      isLogin: computed(() => {
+        return store.getters.isLogin
+      }),
+      userInfo: computed(() => {
+        return JSON.parse(localStorage.getItem('userInfo')) || null
+      })
     })
     onMounted(() => {
       const id = route.params.id

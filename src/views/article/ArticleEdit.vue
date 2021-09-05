@@ -152,7 +152,7 @@ export default {
     function toPublish () {
       toHtml()
       state.articleForm.contentToHtml = state.contentToHtml
-      state.articleForm.author = 'bogu'
+      // state.articleForm.author = 'bogu'
       if (route.name === 'ArticleEdit') {
         update(state.articleForm).then(res => {
           if (res.retCode === 200) {

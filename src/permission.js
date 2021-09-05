@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
       asyncRoutes.forEach(item => router.addRoute(item))
       userInfo.roles = 'user'
       localStorage.setItem('userInfo', JSON.stringify(userInfo))
-      localStorage.setItem('userRouter', JSON.stringify(router.getRoutes()))
+      // localStorage.setItem('userRouter', JSON.stringify(router.getRoutes()))
       next()
     } else if (roles.length === 0) {
       console.log('reset router', to)

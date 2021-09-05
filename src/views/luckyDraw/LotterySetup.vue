@@ -5,8 +5,11 @@
       label-width="100px"
       size="mini"
     >
-      <p>矿石设置</p>
-      <el-form-item label="矿石数量：">
+      <p v-if="oreSetupShow">矿石设置</p>
+      <el-form-item
+        label="矿石数量："
+        v-if="oreSetupShow"
+      >
         <el-input
           v-model="oreAmount"
           class="half-width"
@@ -42,10 +45,14 @@
 import { reactive, toRefs } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import { computed, onMounted } from '@vue/runtime-core'
+import { updateLotterySetupApi } from '@/api/lottery'
+import { useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
 export default {
   name: 'LotterySetup',
   setup () {
     const store = useStore()
+    const route = useRoute()
     const state = reactive({
       weightSetup: computed(() => store.getters.trophies.filter(item => item.locked <= 0)),
       weight: computed(() => {
@@ -55,7 +62,10 @@ export default {
         })
         return weight
       }),
-      oreAmount: store.getters.oreAmount
+      oreAmount: store.getters.oreAmount,
+      oreSetupShow: computed(() => {
+        return route.name !== 'LuckyDrawPro'
+      })
     })
 
     onMounted(() => {
@@ -64,12 +74,21 @@ export default {
     })
 
     function done () {
-      // state.weight = 0
-      // state.weightSetup.forEach(item => {
-      //   state.weight += parseInt(item.weight)
-      // })
       store.dispatch('lottery/updateOre', parseInt(state.oreAmount))
-      console.log('-------0->', state.weightSetup)
+      if (route.name === 'LuckyDrawPro') {
+        const params = {
+          oreAmount: state.oreAmount,
+          trophyList: state.weightSetup
+        }
+        updateLotterySetupApi(params).then(res => {
+          console.log('res', res)
+          if (res.retCode === 200) {
+            ElMessage.success('权重更新成功')
+          } else {
+            ElMessage.error(res.retMsg)
+          }
+        })
+      }
     }
 
     return {

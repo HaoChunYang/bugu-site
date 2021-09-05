@@ -51,6 +51,7 @@ import LotterySetup from './LotterySetup.vue'
 import { reactive, toRefs } from '@vue/reactivity'
 import { computed, onMounted } from '@vue/runtime-core'
 import { useStore } from 'vuex'
+import { ElMessageBox } from 'element-plus'
 export default {
   name: 'LuckyDraw',
   components: {
@@ -206,6 +207,12 @@ export default {
       const myTrophy = trophies.filter((item) => item.id === trophyId)[0]
       state.myTrophies.push(myTrophy)
       console.log('恭喜你中奖', myTrophy.name)
+      ElMessageBox.confirm(myTrophy.name, '恭喜您中奖', {
+        confirmButtonText: '再抽一次',
+        showCancelButton: false,
+        center: true
+      })
+
       if (trophyId === 1) {
         store.dispatch('lottery/addOre', 66)
       }
