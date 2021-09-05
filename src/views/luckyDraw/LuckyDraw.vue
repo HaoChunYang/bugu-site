@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-link to="/lottery-pro">抽奖Demo切换进阶版</router-link>
     <div class="blue-bg-box">
       <section>
         <p class="sub-title">幸运抽奖</p>
